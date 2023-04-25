@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   booking:
-    image: riceguard16/booking-service:latest
+    image: jacobkaae/booking-service:latest
     container_name: booking
     environment:
       - FilePath=/srv/plans/
@@ -17,8 +17,25 @@ services:
       - rabbitmq
 
   planning:
-    image: riceguard16/planning-service:latest
+    image: jacobkaae/planning-service:latest
     container_name: planning
+    environment:
+      - FilePath=/srv/plans/
+      - HostnameRabbit=rabbitmq-dev
+    expose:
+      - "80"
+    networks:
+      - default
+    volumes:
+      - plans:/srv/plans
+    restart: on-failure
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  maintenance:
+    image: jacobkaae/maintenance-service:latest
+    container_name: maintenance
     environment:
       - FilePath=/srv/plans/
       - HostnameRabbit=rabbitmq-dev
@@ -71,6 +88,7 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - planning
+      - maintenance
       - booking
     ports:
       - "4000:4000"
