@@ -90,14 +90,63 @@ services:
       - planning
       - maintenance
       - booking
+      - authentication
     ports:
       - "4000:4000"
+
+  vault_dev:
+    image: hashicorp/vault:latest
+    restart: on-failure:10
+    ports:
+        - "8201:8201"
+    environment:
+        VAULT_ADDR: 'https://0.0.0.0:8201'
+        VAULT_LOCAL_CONFIG: '{"listener": [{"tcp":{"address": "0.0.0.0:8201","tls_disable":"0", "tls_cert_file":"/data/cert.pem", "tls_key_file":"/data/key.pem"}}], "default_lease_ttl": "168h", "max_lease_ttl": "720h"}, "ui": true}'
+        VAULT_DEV_ROOT_TOKEN_ID: '00000000-0000-0000-0000-000000000000'
+        VAULT_TOKEN: '00000000-0000-0000-0000-000000000000'
+    cap_add:
+        - IPC_LOCK
+    volumes:
+        - ./vault-volume:/data
+    healthcheck:
+        retries: 5
+    command: server -dev -dev-root-token-id="00000000-0000-0000-0000-000000000000"
+  
+  authentication:
+    image: jacobkaae/auth-service:latest
+    container_name: authentication
+    environment:
+      - Secret=fwnhy8423HBgbirf6q3wfrhgedr32etsg7u
+      - Issuer=JADADADDAADA
+      - ConnectionURI=mongodb://admin:1234@mongodb-dev:27017/?authSource=admin
+      - DatabaseName=user
+      - CollectionName=users
+    expose:
+      - "80"
+    networks:
+      - default
+
+  mongodb:
+    image: mongo:latest
+    hostname: "mongodb-dev"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: 1234
+    ports:
+      - 27018:27017
+    volumes:
+      - mongodb_data_container:/data/db
+    networks:
+      - default
 
 volumes:
   plans:
     external: false
   grafana-storage:
     external: true
+  mongodb_data_container:
+  images_data:
+    external: false
 
 networks:
   default:
