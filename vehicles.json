@@ -1,0 +1,26 @@
+[{
+  "_id": "6447e89d0c3233d024d7ce55",
+  "Brand": "Peugeot",
+  "Model": "3006",
+  "RegistrationNumber": "BV23643",
+  "Mileage": 122405,
+  "ServiceHistory": [
+    {
+      "_id": "534",
+      "Date": {
+        "$date": "2023-04-25T14:50:05.027Z"
+      },
+      "Description": "Skiftet dæk",
+      "ServicedBy": "Dennis"
+    }
+  ],
+  "ImageHistory": []
+},{
+  "_id": "644811064021d3a98ef22811",
+  "Brand": "Peugeot",
+  "Model": "3006",
+  "RegistrationNumber": "BV23643",
+  "Mileage": 122405,
+  "ServiceHistory": [],
+  "ImageHistory": []
+}]
