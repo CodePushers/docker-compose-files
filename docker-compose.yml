@@ -28,6 +28,8 @@ services:
       - default
     volumes:
       - plans:/srv/plans
+    healthcheck:
+        retries: 5
     restart: on-failure
     depends_on:
       rabbitmq:
@@ -94,6 +96,8 @@ services:
       - booking
       - authentication
       - vehicle
+    healthcheck:
+        retries: 5
     ports:
       - "4000:4000"
 
