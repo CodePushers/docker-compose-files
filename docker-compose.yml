@@ -7,6 +7,8 @@ services:
     environment:
       - FilePath=/srv/plans/
       - HostnameRabbit=rabbitmq-dev
+      - Secret=fwnhy8423HBgbirf6q3wfrhgedr32etsg7u
+      - Issuer=JADADADDAADA
     expose:
       - "80"
     networks:
@@ -143,6 +145,7 @@ services:
       - DatabaseName=fleet
       - CollectionName=vehicles
       - ImagePath=/srv/images/
+      
     expose:
       - "80"
     volumes:
